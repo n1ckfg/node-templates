@@ -1,9 +1,7 @@
 #/bin/bash
 
-BRANCH=main
-
-git fetch origin $BRANCH
-git reset --hard origin/$BRANCH
-git pull origin $BRANCH --force
+git fetch origin main
+git reset --hard origin/main
+git pull origin main --force
 npm install
 
