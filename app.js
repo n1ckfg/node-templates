@@ -2,17 +2,22 @@
 
 // ~ ~ ~   1. SETUP   ~ ~ ~
 // This boilerplate will not typically change.
-// Part of the setup complexity here is needed to make it work seamessly both
-// on a local machine, and in a real deployment.
+
 const express = require("express");
 const app = express();
-
 const fs = require("fs");
 const dotenv = require("dotenv").config();
-
 const path = require("path")
 const url = require("url");
 const assert = require("assert");
+
+const PUBLIC_PATH = path.join(__dirname, "public"); // This is where the client site will be served from
+
+app.use(express.static(PUBLIC_PATH)); // Serve static files from PUBLIC_PATH
+
+app.get("/", function(req, res) { // Default to index.html if no file given
+    res.sendFile(path.join(PUBLIC_PATH, "index.html"))
+});
 
 const debug = process.env.DEBUG || "true";
 
@@ -31,10 +36,7 @@ const port_http = process.env.PORT_HTTP || 8080;
 const port_https = process.env.PORT_HTTPS || 443;
 const port_ws = process.env.PORT_WS || 4321;
 
-// This is where the client site will be served from
-const PUBLIC_PATH = path.join(__dirname, "public");
-
-// This is how frequently the server will check for messages, in ms.
+// This is how frequently the server will handle messages, in ms.
 // default -- pingInterval: 25000, pingTimeout: 60000
 // low latency -- pingInterval: 5000, pingTimeout: 10000
 const ping_interval = 5000;
@@ -42,6 +44,8 @@ const ping_timeout = 10000;
 
 let io, http;
 
+// Part of the setup complexity here is needed to make the app work both
+// on a local machine, and in a real deployment.
 if (!debug) {
     http = require("http");
 
@@ -62,14 +66,6 @@ if (!debug) {
         pingTimeout: ping_timeout
     });
 }
-
-// Serve static files from PUBLIC_PATH:
-app.use(express.static(PUBLIC_PATH)); 
-
-// Default to index.html if no file given:
-app.get("/", function(req, res) {
-    res.sendFile(path.join(PUBLIC_PATH, "index.html"))
-});
 
 // Start the server:
 if (!debug) {
@@ -105,15 +101,11 @@ const onWebhook = (req, res) => {
 
 app.post("/redeploy", onWebhook);
 
-app.get("/", function(req, res) {
-    res.sendFile(path.join(PUBLIC_PATH, "index.html"));
-});
-
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
 
 // ~ ~ ~   2. OPERATIONS   ~ ~ ~
 // Here is where you'll typically make customizations.
 
+// Example instructions for receiving messages:
 io.on("connection", function(socket) {
     console.log("A socket.io user connected.");
 
@@ -126,9 +118,10 @@ io.on("connection", function(socket) {
     });
 });
 
-// This will repeat at the given interval in ms.
-const loopInterval = 5000;
+// Example instructions for sending messages:
 
-setInterval(function() {
+const loopInterval = 5000; 
+
+setInterval(function() { // This will repeat at the given interval in ms.
     io.emit("ServerMessageExample", "Hello from server.");
 }, loopInterval);
