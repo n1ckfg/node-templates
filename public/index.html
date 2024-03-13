@@ -1,1 +1,21 @@
-test...
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<script src="./js/libraries/socket.io/socket.io.js"></script>	
+		<script>
+			"use strict";
+
+			let socket = io();
+
+			socket.on("newMessageFromServer", function(data) {
+				console.log("Received message.");
+			});
+		</script>	
+	</head>
+
+	<body>	
+		test
+	</body>
+
+</html>
