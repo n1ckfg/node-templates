@@ -1,7 +1,9 @@
 "use strict";
 
 // ~ ~ ~   1. SETUP   ~ ~ ~
-// This boilerplate will not typically change
+// This boilerplate will not typically change.
+// Part of the setup complexity here is needed to make it work seamessly both
+// on a local machine, and in a real deployment.
 const express = require("express");
 const app = express();
 
