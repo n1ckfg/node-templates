@@ -2,20 +2,42 @@
 <html>
 
 	<head>
-		<script src="./js/libraries/socket.io/socket.io.js"></script>	
-		<script>
-			"use strict";
+		<style>
+			#button {
+				background-color: red;
+				width: 100px;
+				height: 100px;
+				border-radius: 10px;
+			}
 
-			let socket = io();
+			#button:hover {
+				background-color: orange;
+			}
 
-			socket.on("newMessageFromServer", function(data) {
-				console.log("Received message.");
-			});
-		</script>	
+			#button:active {
+				background-color: yellow;
+			}
+		</style>
+		<script src="./js/libraries/socket.io/socket.io.js"></script>			
 	</head>
 
 	<body>	
-		test
+		<div id="button"></div>
+
+		<script>
+			"use strict";
+
+			const socket = io();
+
+			socket.on("ServerMessageExample", function(data) {
+				console.log("Received message from server: " + data);
+			});
+
+			const button = document.getElementById("button");
+			button.addEventListener("click", function() {
+				socket.emit("ClientMessageExample", "Hello from client");
+			});
+		</script>	
 	</body>
 
 </html>

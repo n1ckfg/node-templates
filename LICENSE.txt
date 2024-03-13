@@ -1,5 +1,5 @@
 node-template
-Copyright (c) 2021 Nick Fox-Gieg
+Copyright (c) 2024 Nick Fox-Gieg
 https://fox-gieg.com
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
